@@ -1,4 +1,4 @@
-﻿namespace WebApplication1.Models.Cards
+﻿namespace Weir.Models.Cards
 {
     /// <summary>
     ///     Models a card in the weird game of cards.

@@ -1,4 +1,4 @@
-﻿namespace Weir.Models.Cards
+﻿namespace WeirdCardGame.Data
 {
     /// <summary>
     ///     Models the kinds of card in the weird game of cards.
@@ -19,5 +19,11 @@
         Jack = 11,
         Queen = 12,
         King = 13
+    }
+
+    public class Kind
+    {
+        public int Id;
+        public string Symbol;
     }
 }

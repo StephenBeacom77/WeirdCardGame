@@ -1,4 +1,4 @@
-﻿namespace Weir.Models.Cards
+﻿namespace WeirdCardGame.Data
 {
     /// <summary>
     ///     Models the suits of card in the weird game of cards.
@@ -10,5 +10,11 @@
         Clubs = 2,
         Diamonds = 3,
         Spades = 4
+    }
+
+    public class Suit
+    {
+        public int Id;
+        public string Symbol;
     }
 }

@@ -2,14 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Models.Cards;
+using Weir.Models.Cards;
 
-namespace WebApplication1.Controllers
+namespace Weir.Controllers
 {
     /// <summary>
     ///     Controller for game of cards with weird rules.
     /// </summary>
     /// <remarks>
+    ///     todo: fill in the readme file
+    ///         - using VS2017, EF Core (memory mode), nUnit, Moq
+    ///         - brief notes on
+    ///             - clear winner versus tie - only clear winner saved to db
+    ///             - this means that any tie should be shown as such to be consistent
+    ///     todo: remove unused code
+    ///     todo: component for drawing card in ts/angular
+    ///     todo: client side service for talking to server
+    ///     todo: package the solution by cloning to a different path!
+    ///     
     ///     todo: send card kind info over the wire: id as number, symbol as string - replaces getKindSymbol in TS file
     ///     todo: send card suit info over the wire: id as number, symbol as string - replaces getSuitSymbol in TS file
     ///     todo: Once all cards are dealt, the winner is shown on the screen
