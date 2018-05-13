@@ -8,6 +8,7 @@
 
     .playing-card-panel,
     .playing-card-score {
+        font-weight: bold;
         width: 50px;
         text-align: center;
     }
@@ -17,8 +18,22 @@
         border: solid 1px silver;
         border-radius: 5px;
         padding: 5px;
-        font-weight: bold;
         font-size: large;
+    }
+
+    .playing-info-number,
+    .playing-info-points {
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+    .playing-info-wild {
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .winning-info {
+        text-align: center;
     }
 
     .suit-match {
@@ -71,7 +86,7 @@
     <div class="row">
         <div class="col-md-6 form-group">
             <label for="playerCount">How many players for Round {{roundNumber}}?</label>
-            <input class="form-control input-sm"
+            <input class="form-control input-group-sm"
                    id="playerCount" type="number" min="1" max="10" required="required"
                    [(ngModel)]="playerCount" />
         </div>
@@ -87,38 +102,46 @@
 <div class="panel" *ngIf="wildcard">
     <div class="alert-info modal-body" *ngIf="wildcard">
         <div class="container-fluid">
-            <div class="col-sm-2">
-                <div class="playing-card-panel suit-match"
+            <div class="col-md-6">
+                <div class="playing-info-wild">Wild Card</div>
+                <div class="playing-card-panel suit-match center-block"
                      [class.suit-black]="wildcard.suit % 2 === 0"
                      [class.suit-red]="wildcard.suit % 2 === 1">
                     <div>{{ getKindSymbol(wildcard) }}</div>
                     <div>{{ getSuitSymbol(wildcard) }}</div>
                 </div>
+                <div class="playing-info-wild">Wild Card</div>
             </div>
-            <span>This is the <b>wildcard</b> drawn by the dealer.</span>
-
         </div>
     </div>
 </div>
-<div class="panel" *ngIf="winner">
-    <div class="alert-success modal-body" *ngIf="winner">
-        <span class="glyphicon glyphicon-star">&nbsp;</span>
-        <span>The <b>winner</b> is <b>player {{winner.player}}</b> with the <b>top score</b> of <b>{{winner.points}} points</b>.</span>
+<div class="panel" *ngIf="playerResults">
+    <div class="alert-success modal-body winning-info" *ngIf="winner">
+        <span>The <b>winner</b> is <b>Player {{winner.player}}</b> with the <b>high score</b> of <b>{{winner.points}} points</b>.</span>
+    </div>
+    <div class="alert-warning modal-body winning-info" *ngIf="!winner">
+        <span>The <b>winners</b> are <b>Players {{getWinningPlayers()}}</b> with <b>equal high scores</b> of <b>{{getWinningPoints()}} points</b>.</span>
     </div>
 </div>
 <table class='table table-striped table-bordered' *ngIf="playerResults">
     <thead>
         <tr>
             <th class="col-sm-1 text-center">Player</th>
-            <th class="col-sm-1 text-center">Score</th>
-            <th class="col-sm-2 text-center">Cards in Hand</th>
+            <th class="col-sm-2 text-center">Cards</th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let result of playerResults"
+        <tr *ngFor="let result of playerResults; let a = index"
             [class.success]="winner === result">
-            <td class="text-center">{{ result.player }}</td>
-            <td class="text-center">{{ result.points }}</td>
+            <td class="text-center">
+                <p class="playing-info-number">
+                    <span class="glyphicon" [class.glyphicon-star]="winner === result"></span>
+                    &nbsp;{{ getPlayerPlace(a + 1) }}&nbsp;
+                    <span class="glyphicon" [class.glyphicon-star]="winner === result"></span>
+                </p>
+                <p class="playing-info-number">Player {{ result.player }}</p>
+                <p class="playing-info-points">{{ result.points }} points</p>
+            </td>
             <td>
                 <div class="container-fluid">
                     <div *ngFor="let card of result.cards"

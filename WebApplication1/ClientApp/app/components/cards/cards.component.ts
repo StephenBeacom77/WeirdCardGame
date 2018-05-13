@@ -7,11 +7,13 @@ import { Http } from '@angular/http';
 })
 export class CardsComponent {
     public ruleCards: Card[];
+    public wildcard: Card;
+
     public roundNumber: number = 1;
     public playerCount: number = 2;
+
     public playerResults: PlayerResult[];
-    public winner: PlayerResult;
-    public wildcard: Card;
+    public winner: PlayerResult | null;
 
     private http: Http;
     private baseUrl: string;
@@ -44,13 +46,38 @@ export class CardsComponent {
                 let gameResult = result.json() as GameResult;
                 this.playerResults = gameResult.playerResults;
                 this.wildcard = gameResult.wildcard;
-                this.winner = gameResult.playerResults[0];
+                this.winner = this.getWinner();
             },
             error => {
                 console.error(error)
                 alert(error)
             }
         );
+    }
+
+    public getWinningPlayers(): string {
+        let winners = this.playerResults.filter((pr) => pr.points >= this.playerResults[0].points);
+        return winners.map(w => w.player.toString()).join(", ");
+    }
+
+    public getWinningPoints(): number {
+        return this.playerResults[0].points;
+    }
+
+    public getWinner(): PlayerResult | null {
+        var winner: PlayerResult  | null;
+        let topScores = this.playerResults.filter((pr) => pr.points >= this.playerResults[0].points);
+        winner = topScores.length === 1 ? this.playerResults[0] : null;
+        return winner;
+    }
+
+    public getPlayerPlace(place: number): string {
+        switch (place) {
+            case 1: return "1st";
+            case 2: return "2nd";
+            case 3: return "3rd";
+        }
+        return place + "th";
     }
 
     public getKindSymbol(card: Card): string {
