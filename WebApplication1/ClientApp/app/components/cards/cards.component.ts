@@ -25,19 +25,6 @@ export class CardsComponent {
         this.getRuleCards();
     }
 
-    private getRuleCards() {
-        let url = this.baseUrl + 'api/CardGame/GetRuleCards';
-        this.http.get(url).subscribe(
-            result => {
-                this.ruleCards = result.json() as Card[];
-            },
-            error => {
-                console.error(error)
-                alert(error)
-            }
-        );
-    }
-
     public playGame() {
         this.roundNumber++;
         let url = this.baseUrl + 'api/CardGame/PlayGame?playerCount=' + this.playerCount;
@@ -108,6 +95,20 @@ export class CardsComponent {
         }
         return "?";
     }
+
+    private getRuleCards() {
+        let url = this.baseUrl + 'api/CardGame/GetRuleCards';
+        this.http.get(url).subscribe(
+            result => {
+                this.ruleCards = result.json() as Card[];
+            },
+            error => {
+                console.error(error)
+                alert(error)
+            }
+        );
+    }
+
 }
 
 interface GameResult {
@@ -128,3 +129,18 @@ interface Card {
     points: number;
 }
 
+class Kind {
+    public static readonly TheAce: number = 1;
+    public static readonly Two: number = 2;
+    public static readonly Three: number = 3;
+    public static readonly Four: number = 4;
+    public static readonly Five: number = 5;
+    public static readonly Six: number = 6;
+    public static readonly Seven: number = 7;
+    public static readonly Eight: number = 8;
+    public static readonly Nine: number = 9;
+    public static readonly Ten: number = 10;
+    public static readonly Jack: number = 11;
+    public static readonly Queen: number = 12;
+    public static readonly King: number = 13;
+}

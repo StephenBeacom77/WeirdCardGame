@@ -2,15 +2,52 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Models.Cards;
 
 namespace WebApplication1.Controllers
 {
     /// <summary>
-    ///     possible game results: single winner vs tied
+    ///     Controller for game of cards with weird rules.
     /// </summary>
-
+    /// <remarks>
+    ///     todo: send card kind info over the wire: id as number, symbol as string - replaces getKindSymbol in TS file
+    ///     todo: send card suit info over the wire: id as number, symbol as string - replaces getSuitSymbol in TS file
+    ///     todo: Once all cards are dealt, the winner is shown on the screen
+    ///         - bonus points for animation
+    ///         - maybe just show the winner info after the players are listed
+    ///         - maybe just leave this bit alone - probably the best option
+    ///     todo: Card values as well as history of all previous winners should be stored in a database.
+    ///         - card values in database
+    ///             - works in well with top two todos
+    ///                 - put kinds and suits in separate tables
+    ///                 - columns are id as int, symbol as string, pk on id
+    ///         - previous winners in database
+    ///             - game service should store the winning player per round in winners table
+    ///                 - columns are: round as int, player number as nullable int, pk = round
+    ///                 - if no clear winner for a given round then store null as winner
+    ///             - use EF and in memory db option for storage - see FC code!
+    ///     todo: add some unit tests for server code of significance
+    ///         - indicate in readme that not all code is tested due to lack of time
+    ///             - indicate what else should be tested?
+    ///         - CardGameController
+    ///             - GetRuleCards
+    ///                 - single test to check for all rule cards
+    ///             - PlayGame
+    ///                 - multiple tests to check for different player counts
+    ///                     - allowed: 1, 2, 9, 10
+    ///                     - invalid: 0, 11
+    ///                 - probably need a CardScoringService to score cards on kind and suit
+    ///                     - it has GetScoredCard(card, wildcard)
+    ///                         - it has logic from GetPointsForKind and GetScoredCard
+    ///                     - it can be tested and mocked for other tests
+    ///             - Deck
+    ///                 - test that it has 52 cards
+    ///                     - by drawing them one by one
+    ///                         - check off every combo of kind and suit with zero points
+    ///                         - the 53rd draw should fail
+    /// </remarks>
     [Route("api/[controller]")]
-    public class CardGameController : Controller
+    public sealed class CardGameController : Controller
     {
         private const int HandSize = 5;
         private const int MinPlayerCount = 1;
@@ -21,12 +58,12 @@ namespace WebApplication1.Controllers
         {
             var cards = new Card[]
             {
-                new Card(Card.Kinds.Ace, Card.Suits.None, GetPointsForKind((int)Card.Kinds.Ace)),
-                new Card(Card.Kinds.King, Card.Suits.None, GetPointsForKind((int)Card.Kinds.King)),
-                new Card(Card.Kinds.Queen, Card.Suits.None, GetPointsForKind((int)Card.Kinds.Queen)),
-                new Card(Card.Kinds.Jack, Card.Suits.None, GetPointsForKind((int)Card.Kinds.Jack)),
-                new Card(Card.Kinds.Ten, Card.Suits.None, GetPointsForKind((int)Card.Kinds.Ten)),
-                new Card(Card.Kinds.None, Card.Suits.None, GetPointsForKind((int)Card.Kinds.None)),
+                new Card(Kinds.Ace, Suits.None, GetPointsForKind((int)Kinds.Ace)),
+                new Card(Kinds.King, Suits.None, GetPointsForKind((int)Kinds.King)),
+                new Card(Kinds.Queen, Suits.None, GetPointsForKind((int)Kinds.Queen)),
+                new Card(Kinds.Jack, Suits.None, GetPointsForKind((int)Kinds.Jack)),
+                new Card(Kinds.Ten, Suits.None, GetPointsForKind((int)Kinds.Ten)),
+                new Card(Kinds.None, Suits.None, GetPointsForKind((int)Kinds.None)),
             };
             return cards;
         }
@@ -96,56 +133,38 @@ namespace WebApplication1.Controllers
 
             switch (kind)
             {
-                case (int)Card.Kinds.Ace:
+                case (int)Kinds.Ace:
                     return PointsForAce;
-                case (int)Card.Kinds.Ten:
+                case (int)Kinds.Ten:
                     return PointsForTen;
-                case (int)Card.Kinds.King:
+                case (int)Kinds.King:
                     return PointsForKing;
-                case (int)Card.Kinds.Queen:
+                case (int)Kinds.Queen:
                     return PointsForQueen;
-                case (int)Card.Kinds.Jack:
+                case (int)Kinds.Jack:
                     return PointsForJack;
             }
             return PointsForOther;
         }
 
-        public class GameResult
+        private sealed class Deck
         {
-            public Card Wildcard { get; set; }
-            public PlayerResult[] PlayerResults { get; set; }
-        }
-
-        public class PlayerResult
-        {
-            public int Player { get; set; }
-            public int Points { get; set; }
-            public Card[] Cards { get; set; }
-        }
-
-        private class Deck
-        {
-            /// <summary>
-            /// - faces could be dictionary of index, symbol, value
-            /// - suits could be dictionary of index, symbol
-            /// </summary>
-
-            private static readonly int KindCount = Enum.GetValues(typeof(Card.Kinds)).Length - 1;
-            private static readonly int SuitCount = Enum.GetValues(typeof(Card.Suits)).Length - 1;
+            private static readonly int KindCount = Enum.GetValues(typeof(Kinds)).Length - 1; // exclude kind of none
+            private static readonly int SuitCount = Enum.GetValues(typeof(Suits)).Length - 1; // exclude suit of none
 
             private List<Card> pile = new List<Card>(KindCount * SuitCount);
             private Random shuffler = new Random();
 
             public Deck()
             {
-                var kinds = Enum.GetValues(typeof(Card.Kinds));
-                var suits = Enum.GetValues(typeof(Card.Suits));
+                var kinds = Enum.GetValues(typeof(Kinds));
+                var suits = Enum.GetValues(typeof(Suits));
                 foreach (int kind in kinds)
                 {
-                    if (kind == (int)Card.Kinds.None) continue;
+                    if (kind == (int)Kinds.None) continue;
                     foreach (int suit in suits)
                     {
-                        if (suit == (int)Card.Suits.None) continue;
+                        if (suit == (int)Suits.None) continue;
                         pile.Add(new Card(kind, suit));
                     }
                 }
@@ -176,54 +195,6 @@ namespace WebApplication1.Controllers
                     .OrderByDescending(c => c.Kind)
                     .OrderBy(c => c.Suit)
                     .ToArray();
-            }
-        }
-
-        public class Card
-        {
-            public Card(Kinds kind, Suits suit, int points = 0)
-            {
-                Kind = (int)kind;
-                Suit = (int)suit;
-                Points = points;
-            }
-
-            public Card(int kind, int suit, int points = 0)
-            {
-                Kind = kind;
-                Suit = suit;
-                Points = points;
-            }
-
-            public int Kind { get; private set; }
-            public int Suit { get; private set; }
-            public int Points { get; private set; }
-
-            public enum Kinds
-            {
-                None = 0,
-                Ace = 1,
-                Two = 2,
-                Three = 3,
-                Four = 4,
-                Five = 5,
-                Six = 6,
-                Seven = 7,
-                Eight = 8,
-                Nine = 9,
-                Ten = 10,
-                Jack = 11,
-                Queen = 12,
-                King = 13
-            }
-
-            public enum Suits
-            {
-                None = 0,
-                Hearts = 1,
-                Clubs = 2,
-                Diamonds = 3,
-                Spades = 4
             }
         }
     }
