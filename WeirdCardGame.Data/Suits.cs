@@ -11,10 +11,4 @@
         Diamonds = 3,
         Spades = 4
     }
-
-    public class Suit
-    {
-        public int Id;
-        public string Symbol;
-    }
 }

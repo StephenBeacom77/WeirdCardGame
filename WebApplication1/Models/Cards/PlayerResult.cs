@@ -1,4 +1,4 @@
-﻿namespace Weir.Models.Cards
+﻿namespace WeirdCardGame.Models.Cards
 {
     public class PlayerResult
     {

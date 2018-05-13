@@ -1,14 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WeirdCardGame.Data;
 
-namespace Weir
+namespace WeirdCardGame
 {
     public class Startup
     {
@@ -22,6 +20,10 @@ namespace Weir
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<GameContext>(
+                optionsAction: opt => opt.UseInMemoryDatabase("WeirdCardGame"),
+                contextLifetime: ServiceLifetime.Singleton);
+
             services.AddMvc();
         }
 
@@ -43,6 +45,12 @@ namespace Weir
 
             app.UseStaticFiles();
 
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<GameContext>();
+                AddCardData(context);
+            }
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -53,6 +61,45 @@ namespace Weir
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
+        }
+
+        /// <summary>
+        /// todo: move to other class named GameDataSeeder - added via DI?
+        /// </summary>
+        private void AddCardData(GameContext context)
+        {
+            AddKindData(context);
+            AddSuitData(context);
+        }
+
+        private void AddKindData(GameContext context)
+        {
+            context.Kinds.RemoveRange(context.Kinds);
+            context.Kinds.Add(new Kind(Kinds.None , "?"));
+            context.Kinds.Add(new Kind(Kinds.Ace  , "A"));
+            context.Kinds.Add(new Kind(Kinds.Two  , "2"));
+            context.Kinds.Add(new Kind(Kinds.Three, "3"));
+            context.Kinds.Add(new Kind(Kinds.Four , "4"));
+            context.Kinds.Add(new Kind(Kinds.Five , "5"));
+            context.Kinds.Add(new Kind(Kinds.Six  , "6"));
+            context.Kinds.Add(new Kind(Kinds.Seven, "7"));
+            context.Kinds.Add(new Kind(Kinds.Eight, "8"));
+            context.Kinds.Add(new Kind(Kinds.Nine , "9"));
+            context.Kinds.Add(new Kind(Kinds.Ten  , "10"));
+            context.Kinds.Add(new Kind(Kinds.Jack , "J"));
+            context.Kinds.Add(new Kind(Kinds.Queen, "Q"));
+            context.Kinds.Add(new Kind(Kinds.King , "K"));
+            context.SaveChanges();
+        }
+
+        private void AddSuitData(GameContext context)
+        {
+            context.Suits.Add(new Suit(Suits.None    , "?"));
+            context.Suits.Add(new Suit(Suits.Hearts  , "\u2665"));
+            context.Suits.Add(new Suit(Suits.Clubs   , "\u2663"));
+            context.Suits.Add(new Suit(Suits.Diamonds, "\u2666"));
+            context.Suits.Add(new Suit(Suits.Spades  , "\u2660"));
+            context.SaveChanges();
         }
     }
 }

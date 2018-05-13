@@ -18,10 +18,15 @@ export class CardsComponent {
     private http: Http;
     private baseUrl: string;
 
+    private kinds: Kind[];
+    private suits: Suit[];
+
     constructor(http: Http, @Inject('BASE_URL') baseUrl: string) {
         this.http = http;
         this.baseUrl = baseUrl;
 
+        this.getCardKinds();
+        this.getCardSuits();
         this.getRuleCards();
     }
 
@@ -68,32 +73,13 @@ export class CardsComponent {
     }
 
     public getKindSymbol(card: Card): string {
-        switch (card.kind) {
-            case 1: return "A";
-            case 2: return "2";
-            case 3: return "3";
-            case 4: return "4";
-            case 5: return "5";
-            case 6: return "6";
-            case 7: return "7";
-            case 8: return "8";
-            case 9: return "9";
-            case 10: return "10";
-            case 11: return "J";
-            case 12: return "Q";
-            case 13: return "K";
-        }
-        return "?";
+        let kind = this.kinds.find(k => k.id === card.kind);
+        return !kind ? "-" : kind.symbol;
     }
 
     public getSuitSymbol(card: Card): string {
-        switch (card.suit) {
-            case 1: return "\u2665"; // hearts
-            case 2: return "\u2663"; // clubs
-            case 3: return "\u2666"; // diamonds
-            case 4: return "\u2660"; // spades
-        }
-        return "?";
+        let suit = this.suits.find(s => s.id === card.suit);
+        return !suit ? "-" : suit.symbol;
     }
 
     private getRuleCards() {
@@ -109,6 +95,31 @@ export class CardsComponent {
         );
     }
 
+    private getCardKinds() {
+        let url = this.baseUrl + 'api/CardGame/GetCardKinds';
+        this.http.get(url).subscribe(
+            result => {
+                this.kinds = result.json() as Kind[];
+            },
+            error => {
+                console.error(error)
+                alert(error)
+            }
+        );
+    }
+
+    private getCardSuits() {
+        let url = this.baseUrl + 'api/CardGame/GetCardSuits';
+        this.http.get(url).subscribe(
+            result => {
+                this.suits = result.json() as Suit[];
+            },
+            error => {
+                console.error(error)
+                alert(error)
+            }
+        );
+    }
 }
 
 interface GameResult {
@@ -129,18 +140,12 @@ interface Card {
     points: number;
 }
 
-class Kind {
-    public static readonly TheAce: number = 1;
-    public static readonly Two: number = 2;
-    public static readonly Three: number = 3;
-    public static readonly Four: number = 4;
-    public static readonly Five: number = 5;
-    public static readonly Six: number = 6;
-    public static readonly Seven: number = 7;
-    public static readonly Eight: number = 8;
-    public static readonly Nine: number = 9;
-    public static readonly Ten: number = 10;
-    public static readonly Jack: number = 11;
-    public static readonly Queen: number = 12;
-    public static readonly King: number = 13;
+interface Kind {
+    id: number;
+    symbol: string;
+}
+
+interface Suit {
+    id: number;
+    symbol: string;
 }

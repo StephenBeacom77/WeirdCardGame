@@ -20,10 +20,4 @@
         Queen = 12,
         King = 13
     }
-
-    public class Kind
-    {
-        public int Id;
-        public string Symbol;
-    }
 }

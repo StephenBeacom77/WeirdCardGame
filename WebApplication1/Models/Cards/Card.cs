@@ -1,4 +1,6 @@
-﻿namespace Weir.Models.Cards
+﻿using WeirdCardGame.Data;
+
+namespace WeirdCardGame.Models.Cards
 {
     /// <summary>
     ///     Models a card in the weird game of cards.

@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Weir.Models.Cards;
+using Microsoft.EntityFrameworkCore;
+using WeirdCardGame.Data;
+using WeirdCardGame.Models.Cards;
 
-namespace Weir.Controllers
+namespace WeirdCardGame.Controllers
 {
     /// <summary>
     ///     Controller for game of cards with weird rules.
@@ -20,17 +22,11 @@ namespace Weir.Controllers
     ///     todo: client side service for talking to server
     ///     todo: package the solution by cloning to a different path!
     ///     
-    ///     todo: send card kind info over the wire: id as number, symbol as string - replaces getKindSymbol in TS file
-    ///     todo: send card suit info over the wire: id as number, symbol as string - replaces getSuitSymbol in TS file
     ///     todo: Once all cards are dealt, the winner is shown on the screen
     ///         - bonus points for animation
     ///         - maybe just show the winner info after the players are listed
     ///         - maybe just leave this bit alone - probably the best option
-    ///     todo: Card values as well as history of all previous winners should be stored in a database.
-    ///         - card values in database
-    ///             - works in well with top two todos
-    ///                 - put kinds and suits in separate tables
-    ///                 - columns are id as int, symbol as string, pk on id
+    ///     todo: history of all previous winners should be stored in a database.
     ///         - previous winners in database
     ///             - game service should store the winning player per round in winners table
     ///                 - columns are: round as int, player number as nullable int, pk = round
@@ -63,6 +59,13 @@ namespace Weir.Controllers
         private const int MinPlayerCount = 1;
         private const int MaxPlayerCount = 10;
 
+        private readonly GameContext _gameContext;
+
+        public CardGameController(GameContext gameContext)
+        {
+            _gameContext = gameContext;
+        }
+
         [HttpGet("[action]")]
         public Card[] GetRuleCards()
         {
@@ -76,6 +79,18 @@ namespace Weir.Controllers
                 new Card(Kinds.None, Suits.None, GetPointsForKind((int)Kinds.None)),
             };
             return cards;
+        }
+
+        [HttpGet("[action]")]
+        public Kind[] GetCardKinds()
+        {
+            return _gameContext.Kinds.AsNoTracking().ToArray();
+        }
+
+        [HttpGet("[action]")]
+        public Suit[] GetCardSuits()
+        {
+            return _gameContext.Suits.AsNoTracking().ToArray();
         }
 
         [HttpGet("[action]")]
@@ -105,7 +120,16 @@ namespace Weir.Controllers
                 Wildcard = wildcard,
                 PlayerResults = playerResults.OrderByDescending(pr => pr.Points).ToArray()
             };
+
+            SaveGameResult(gameResult);
             return gameResult;
+        }
+
+        private void SaveGameResult(GameResult gameResult)
+        {
+            var winnerId = gameResult.PlayerResults[0].Player;
+            _gameContext.Games.Add(new Game { PlayerId = winnerId });
+            _gameContext.SaveChanges();
         }
 
         private Card[] GetScoredCards(Card[] hand, Card wildcard)
