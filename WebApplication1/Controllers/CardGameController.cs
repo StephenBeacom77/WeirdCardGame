@@ -15,8 +15,7 @@ namespace WeirdCardGame.Controllers
     ///     todo: fill in the readme file
     ///         - using VS2017, EF Core (memory mode), nUnit, Moq
     ///         - brief notes on
-    ///             - clear winner versus tie - only clear winner saved to db
-    ///             - this means that any tie should be shown as such to be consistent
+    ///             - clear winner versus tie - only clear winners are winners
     ///     todo: remove unused code
     ///     todo: component for drawing card in ts/angular
     ///     todo: client side service for talking to server

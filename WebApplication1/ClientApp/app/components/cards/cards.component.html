@@ -120,7 +120,7 @@
         <span>The <b>winner</b> is <b>Player {{winner.player}}</b> with the <b>high score</b> of <b>{{winner.points}} points</b>.</span>
     </div>
     <div class="alert-warning modal-body winning-info" *ngIf="!winner">
-        <span>The <b>winners</b> are <b>Players {{getWinningPlayers()}}</b> with <b>equal high scores</b> of <b>{{getWinningPoints()}} points</b>.</span>
+        <span>There is no clear <b>winner</b> because <b>Players {{ getWinningPlayers() }}</b> have <b>equal high scores</b> of <b>{{getWinningPoints()}} points</b>.</span>
     </div>
 </div>
 <table class="table table-striped table-bordered" *ngIf="playerResults">

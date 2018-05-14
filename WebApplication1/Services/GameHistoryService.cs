@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using WeirdCardGame.Data;
 using WeirdCardGame.Models;
 
@@ -31,8 +32,9 @@ namespace WeirdCardGame.Services
         /// </param>
         public void Save(GameResult gameResult)
         {
-            var winnerId = gameResult.PlayerResults[0].Player;
-            _gameContext.Games.Add(new Game { PlayerId = winnerId });
+            var winner = gameResult.PlayerResults[0];
+            var winners = gameResult.PlayerResults.Count(x => x.Points == winner.Points);
+            _gameContext.Games.Add(new Game { PlayerId = winners == 1 ? winner.Player : default(int?) });
             _gameContext.SaveChanges();
         }
     }
