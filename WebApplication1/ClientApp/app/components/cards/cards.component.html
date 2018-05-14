@@ -84,7 +84,7 @@
 </div>
 <div class="panel">
     <div class="row">
-        <div class="col-md-6 form-group">
+        <div class="col-sm-6 form-group">
             <label for="playerCount">How many players for Round {{roundNumber}}?</label>
             <input class="form-control input-group-sm"
                    id="playerCount" type="number" min="1" max="10" required="required"
@@ -92,7 +92,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6 form-group">
+        <div class="col-sm-2 form-group">
             <button class="btn btn-sm btn-primary" (click)="playGame()">
                 Play Round {{roundNumber}}
             </button>
@@ -102,7 +102,7 @@
 <div class="panel" *ngIf="wildcard">
     <div class="alert-info modal-body" *ngIf="wildcard">
         <div class="container-fluid">
-            <div class="col-md-6">
+            <div class="col-md-2">
                 <div class="playing-info-wild">Wild Card</div>
                 <div class="playing-card-panel suit-match center-block"
                      [class.suit-black]="wildcard.suit % 2 === 0"
@@ -123,7 +123,7 @@
         <span>The <b>winners</b> are <b>Players {{getWinningPlayers()}}</b> with <b>equal high scores</b> of <b>{{getWinningPoints()}} points</b>.</span>
     </div>
 </div>
-<table class='table table-striped table-bordered' *ngIf="playerResults">
+<table class="table table-striped table-bordered" *ngIf="playerResults">
     <thead>
         <tr>
             <th class="col-sm-1 text-center">Player</th>

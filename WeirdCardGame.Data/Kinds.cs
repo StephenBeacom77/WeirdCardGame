@@ -5,7 +5,7 @@
     /// </summary>
     public enum Kinds
     {
-        None = 0,
+        Any = 0,
         Ace = 1,
         Two = 2,
         Three = 3,

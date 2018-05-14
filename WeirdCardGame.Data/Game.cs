@@ -8,11 +8,5 @@
         public Game()
         {
         }
-
-        public Game(int id, int? playerId)
-        {
-            Id = id;
-            PlayerId = playerId;
-        }
     }
 }

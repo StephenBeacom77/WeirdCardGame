@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WeirdCardGame.Data;
+using WeirdCardGame.Services;
 
 namespace WeirdCardGame
 {
@@ -23,6 +24,18 @@ namespace WeirdCardGame
             services.AddDbContext<GameContext>(
                 optionsAction: opt => opt.UseInMemoryDatabase("WeirdCardGame"),
                 contextLifetime: ServiceLifetime.Singleton);
+
+            services.AddTransient<ICardDrawingService>(
+                sp => new CardDrawingService());
+            services.AddTransient<ICardScoringService>(
+                sp => new CardScoringService());
+            services.AddTransient<IGamePlayingService>(
+                sp => new GamePlayingService(
+                    sp.GetService<ICardDrawingService>(),
+                    sp.GetService<ICardScoringService>()));
+            services.AddTransient<IGameHistoryService>(
+                sp => new GameHistoryService(
+                    sp.GetService<GameContext>()));
 
             services.AddMvc();
         }
@@ -75,7 +88,7 @@ namespace WeirdCardGame
         private void AddKindData(GameContext context)
         {
             context.Kinds.RemoveRange(context.Kinds);
-            context.Kinds.Add(new Kind(Kinds.None , "?"));
+            context.Kinds.Add(new Kind(Kinds.Any , "?"));
             context.Kinds.Add(new Kind(Kinds.Ace  , "A"));
             context.Kinds.Add(new Kind(Kinds.Two  , "2"));
             context.Kinds.Add(new Kind(Kinds.Three, "3"));
@@ -94,7 +107,7 @@ namespace WeirdCardGame
 
         private void AddSuitData(GameContext context)
         {
-            context.Suits.Add(new Suit(Suits.None    , "?"));
+            context.Suits.Add(new Suit(Suits.Any    , "?"));
             context.Suits.Add(new Suit(Suits.Hearts  , "\u2665"));
             context.Suits.Add(new Suit(Suits.Clubs   , "\u2663"));
             context.Suits.Add(new Suit(Suits.Diamonds, "\u2666"));

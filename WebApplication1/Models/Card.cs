@@ -1,6 +1,6 @@
 ﻿using WeirdCardGame.Data;
 
-namespace WeirdCardGame.Models.Cards
+namespace WeirdCardGame.Models
 {
     /// <summary>
     ///     Models a card in the weird game of cards.
