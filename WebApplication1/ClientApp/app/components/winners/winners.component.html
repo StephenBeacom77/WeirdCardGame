@@ -2,17 +2,19 @@
 
 <p *ngIf="!games"><em>Loading...</em></p>
 
-<table class="table table-striped table-bordered" *ngIf="games">
-    <thead>
-        <tr>
-            <th class="col-sm-1 text-center">Round</th>
-            <th class="col-sm-1 text-center">Winner</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let game of games">
-            <td>{{ game.round + 1 }}</td>
-            <td>{{ game.winner }}</td>
-        </tr>
-    </tbody>
-</table>
+<div class="col-md-2">
+    <table class="table table-striped table-bordered" *ngIf="games">
+        <thead>
+            <tr>
+                <th class="col-md-1 text-center">Round</th>
+                <th class="col-md-1 text-center">Winner</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let game of games">
+                <td>{{ game.id }}</td>
+                <td>{{ game.playerId }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

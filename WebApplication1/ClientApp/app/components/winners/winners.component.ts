@@ -12,6 +12,9 @@ export class WinnersComponent {
         http.get(baseUrl + 'api/CardGame/GetWinnersList').subscribe(
             result => {
                 this.games = result.json() as Game[];
+                this.games = this.games.sort((a, b) => {
+                    return a.id < b.id ? 1 : a.id > b.id ? -1 : 0;
+                });
             },
             error => console.error(error)
         );
@@ -19,6 +22,6 @@ export class WinnersComponent {
 }
 
 interface Game {
-    round: number;
-    winner: number;
+    id: number;
+    playerId: number | null;
 }

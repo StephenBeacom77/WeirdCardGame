@@ -28,6 +28,7 @@ export class CardsComponent {
         this.getCardKinds();
         this.getCardSuits();
         this.getRuleCards();
+        this.getNextRound();
     }
 
     public playGame() {
@@ -82,6 +83,19 @@ export class CardsComponent {
         return !suit ? "-" : suit.symbol;
     }
 
+    private getNextRound() {
+        let url = this.baseUrl + 'api/CardGame/GetNextRound';
+        this.http.get(url).subscribe(
+            result => {
+                this.roundNumber = result.json() as number;
+            },
+            error => {
+                console.error(error);
+                alert(error);
+            }
+        );
+    }
+
     private getRuleCards() {
         let url = this.baseUrl + 'api/CardGame/GetRuleCards';
         this.http.get(url).subscribe(
@@ -89,8 +103,8 @@ export class CardsComponent {
                 this.ruleCards = result.json() as Card[];
             },
             error => {
-                console.error(error)
-                alert(error)
+                console.error(error);
+                alert(error);
             }
         );
     }
@@ -102,8 +116,8 @@ export class CardsComponent {
                 this.kinds = result.json() as Kind[];
             },
             error => {
-                console.error(error)
-                alert(error)
+                console.error(error);
+                alert(error);
             }
         );
     }
@@ -115,8 +129,8 @@ export class CardsComponent {
                 this.suits = result.json() as Suit[];
             },
             error => {
-                console.error(error)
-                alert(error)
+                console.error(error);
+                alert(error);
             }
         );
     }

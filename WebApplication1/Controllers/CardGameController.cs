@@ -118,9 +118,17 @@ namespace WeirdCardGame.Controllers
         }
 
         /// <summary>
+        ///     Get the next round to be played.
+        /// </summary>
+        [HttpGet("[action]")]
+        public int GetNextRound()
+        {
+            return _gameContext.Games.Any() ? _gameContext.Games.Max(g => g.Id) + 1 : 1;
+        }
+
+        /// <summary>
         ///     Get the winners of games played.
         /// </summary>
-        /// <returns></returns>
         [HttpGet("[action]")]
         public Game[] GetWinnersList()
         {
