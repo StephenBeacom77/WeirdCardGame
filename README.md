@@ -18,10 +18,10 @@ Notes on how the solution was created
 
 - It is an ASP.NET Core web application named WeirdCardGame.
 	- It was created using a VS2017 template and probably has excess content.
-		- Due to time limitations I did not remove any of the excess content.
+	- I removed some of the excess content but probaby not all of it.
 
 - It makes use of Entity Framework Core for an in memory db.
-	- It does this when running and in unit tests.
+	- It does this when running as the web app and in unit tests.
 
 - It makes use of nUnit and Moq for unit testing.
 --------------------------------------------------------------------------------
