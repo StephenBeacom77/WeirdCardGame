@@ -72,7 +72,7 @@ namespace WeirdCardGame.Services
                 Wildcard = wildcard,
                 PlayerResults = results
                     .OrderByDescending(r => r.Points)
-                    .OrderBy(r => r.Player)
+                    .ThenBy(r => r.Player)
                     .ToArray()
             };
             return gameResult;
