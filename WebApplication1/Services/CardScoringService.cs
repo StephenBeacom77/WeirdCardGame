@@ -10,6 +10,13 @@ namespace WeirdCardGame.Services
     /// </summary>
     public sealed class CardScoringService : ICardScoringService
     {
+        public const int PointsForAce = 11;
+        public const int PointsForTen = 10;
+        public const int PointsForKing = 4;
+        public const int PointsForQueen = 3;
+        public const int PointsForJack = 2;
+        public const int PointsForOther = 0;
+
         /// <summary>
         ///     Get scored cards from the given cards and wild card.
         /// </summary>
@@ -49,13 +56,6 @@ namespace WeirdCardGame.Services
 
         private int GetPointsForKind(int kind)
         {
-            const int PointsForAce = 11;
-            const int PointsForTen = 10;
-            const int PointsForKing = 4;
-            const int PointsForQueen = 3;
-            const int PointsForJack = 2;
-            const int PointsForOther = 0;
-
             switch (kind)
             {
                 case (int)Kinds.Ace:

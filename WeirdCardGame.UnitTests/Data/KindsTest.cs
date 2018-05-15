@@ -10,15 +10,15 @@ namespace WeirdCardGame.UnitTests.Data
         [Test]
         public void ShouldHaveEveryKindInEnum()
         {
-            var suits = Enum.GetValues(typeof(Kinds)) as Kinds[];
-            Assert.That(suits.Length, Is.EqualTo(14)); // Any + the 13 real kinds
+            var kinds = Enum.GetValues(typeof(Kinds)) as Kinds[];
+            Assert.That(kinds.Length, Is.EqualTo(14)); // Any + the 13 real kinds
         }
 
         [Test]
         public void ShouldAddSymbolForEveryKind()
         {
-            var suits = Enum.GetValues(typeof(Kinds)) as Kinds[];
-            foreach (var suit in suits)
+            var kinds = Enum.GetValues(typeof(Kinds)) as Kinds[];
+            foreach (var suit in kinds)
             {
                 var newKind = new Kind(suit, "X");
                 Assert.That(newKind.Id, Is.EqualTo((int)suit));

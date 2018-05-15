@@ -15,8 +15,4 @@
     <ProjectReference Include="..\WeirdCardGame.Data\WeirdCardGame.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>

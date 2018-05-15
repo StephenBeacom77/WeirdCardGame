@@ -30,12 +30,24 @@ namespace WeirdCardGame.Services
         /// <param name="gameResult">
         ///     The game result to save.
         /// </param>
-        public void Save(GameResult gameResult)
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if gameResult or its PlayerResults property is null.
+        /// </exception>
+        public Game Save(GameResult gameResult)
         {
+            if (gameResult == null)
+                throw new ArgumentNullException(nameof(gameResult));
+            if (gameResult.PlayerResults == null)
+                throw new ArgumentNullException($"{nameof(gameResult)}.PlayerResults");
+            if (gameResult.PlayerResults[0] == null)
+                throw new ArgumentNullException($"{nameof(gameResult)}.PlayerResults.0");
+
             var winner = gameResult.PlayerResults[0];
             var winners = gameResult.PlayerResults.Count(x => x.Points == winner.Points);
-            _gameContext.Games.Add(new Game { PlayerId = winners == 1 ? winner.Player : default(int?) });
+            var game = _gameContext.Games.Add(new Game { PlayerId = winners == 1 ? winner.Player : default(int?) });
             _gameContext.SaveChanges();
+            game.State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+            return game.Entity;
         }
     }
 }

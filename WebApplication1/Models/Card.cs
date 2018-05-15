@@ -19,6 +19,7 @@ namespace WeirdCardGame.Models
             Suit = suit;
         }
 
+        //todo: try using enum types to see if they serialize as ints.
         public int Kind { get; private set; }
         public int Suit { get; private set; }
     }

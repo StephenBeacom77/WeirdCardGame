@@ -1,4 +1,5 @@
-﻿using WeirdCardGame.Models;
+﻿using WeirdCardGame.Data;
+using WeirdCardGame.Models;
 
 namespace WeirdCardGame.Services
 {
@@ -10,6 +11,6 @@ namespace WeirdCardGame.Services
         /// <summary>
         ///     Saves a game result.
         /// </summary>
-        void Save(GameResult gameResult);
+        Game Save(GameResult gameResult);
     }
 }
