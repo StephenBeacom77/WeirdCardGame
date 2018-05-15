@@ -11,36 +11,6 @@ namespace WeirdCardGame.Controllers
     /// <summary>
     ///     Controller for game of cards with weird rules.
     /// </summary>
-    /// <remarks>
-    ///     todo: fill in the readme file
-    ///         - using VS2017, EF Core (memory mode), nUnit, Moq
-    ///         - brief notes on
-    ///             - clear winner versus tie - only clear winners are winners
-    ///     todo: remove unused code
-    ///     todo: component for drawing card in ts/angular
-    ///     todo: client side service for talking to server
-    ///     todo: package the solution by cloning to a different path!
-    ///     
-    ///     todo: add some unit tests for server code of significance
-    ///         - indicate in readme that not all code is tested due to lack of time
-    ///             - indicate what else should be tested?
-    ///         - CardGameController
-    ///             - GetRuleCards
-    ///                 - single test to check for all rule cards
-    ///             - PlayGame
-    ///                 - multiple tests to check for different player counts
-    ///                     - allowed: 1, 2, 9, 10
-    ///                     - invalid: 0, 11
-    ///                 - probably need a CardScoringService to score cards on kind and suit
-    ///                     - it has GetScoredCard(card, wildcard)
-    ///                         - it has logic from GetPointsForKind and GetScoredCard
-    ///                     - it can be tested and mocked for other tests
-    ///             - Deck
-    ///                 - test that it has 52 cards
-    ///                     - by drawing them one by one
-    ///                         - check off every combo of kind and suit with zero points
-    ///                         - the 53rd draw should fail
-    /// </remarks>
     [Route("api/[controller]")]
     public sealed class CardGameController : Controller
     {

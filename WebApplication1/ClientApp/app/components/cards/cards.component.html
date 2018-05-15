@@ -48,6 +48,10 @@
     .suit-red {
         color: red;
     }
+
+    .form-control {
+        width: 150px;
+    }
 </style>
 
 <div class="panel">
@@ -84,16 +88,16 @@
 </div>
 <div class="panel">
     <div class="row">
-        <div class="col-sm-6 form-group">
+        <div class="col-sm-3 form-group">
             <label for="playerCount">How many players for Round {{roundNumber}}?</label>
-            <input class="form-control input-group-sm"
+            <input class="form-control text-right"
                    id="playerCount" type="number" min="1" max="10" required="required"
                    [(ngModel)]="playerCount" />
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-2 form-group">
-            <button class="btn btn-sm btn-primary" (click)="playGame()">
+        <div class="col-sm-3 form-group">
+            <button class="form-control btn btn-sm btn-primary" (click)="playGame()">
                 Play Round {{roundNumber}}
             </button>
         </div>
