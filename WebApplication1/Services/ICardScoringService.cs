@@ -11,6 +11,6 @@ namespace WeirdCardGame.Services
         /// <summary>
         ///     Gets scored cards from the given cards and wild card.
         /// </summary>
-        IEnumerable<Card> GetScoredCards(Card[] cards, Card wildcard);
+        IEnumerable<ScoredCard> GetScoredCards(Card[] cards, Card wildcard);
     }
 }

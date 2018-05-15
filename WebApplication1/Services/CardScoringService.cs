@@ -25,7 +25,7 @@ namespace WeirdCardGame.Services
         /// <exception cref="ArgumentNullException">
         ///     Thrown if the cards argument is null.
         /// </exception>
-        public IEnumerable<Card> GetScoredCards(Card[] cards, Card wildcard = null)
+        public IEnumerable<ScoredCard> GetScoredCards(Card[] cards, Card wildcard = null)
         {
             if (cards == null) throw new ArgumentNullException(nameof(cards));
 
@@ -35,7 +35,7 @@ namespace WeirdCardGame.Services
             }
         }
 
-        private Card GetScoredCard(Card card, Card wildcard)
+        private ScoredCard GetScoredCard(Card card, Card wildcard)
         {
             const int MatchingSuitMultiplier = 2;
 
@@ -44,7 +44,7 @@ namespace WeirdCardGame.Services
             var points = card.Suit != wildcard?.Suit
                 ? GetPointsForKind(card.Kind)
                 : GetPointsForKind(card.Kind) * MatchingSuitMultiplier;
-            return new Card(card.Kind, card.Suit, points);
+            return new ScoredCard(card.Kind, card.Suit, points);
         }
 
         private int GetPointsForKind(int kind)
