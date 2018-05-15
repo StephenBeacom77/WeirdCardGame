@@ -27,9 +27,22 @@
         font-weight: bold;
     }
 
-    .playing-info-wild {
+    .wildcard-card {
+        margin-left: 15px;
+    }
+
+    .wildcard-header {
         font-weight: bold;
-        text-align: center;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        margin-left: 10px;
+    }
+
+    .wildcard-footer {
+        font-weight: bold;
+        margin-bottom: 5px;
+        margin-bottom: 10px;
+        margin-left: 10px;
     }
 
     .winning-info {
@@ -49,7 +62,13 @@
         color: red;
     }
 
+    .form-group {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
     .form-control {
+        margin-top: 10px;
         width: 150px;
     }
 </style>
@@ -86,39 +105,33 @@
         </li>
     </ol>
 </div>
-<div class="panel">
-    <div class="row">
-        <div class="col-sm-3 form-group">
-            <label for="playerCount">How many players for Round {{roundNumber}}?</label>
-            <input class="form-control text-right"
-                   id="playerCount" type="number" min="1" max="10" required="required"
-                   [(ngModel)]="playerCount" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-3 form-group">
-            <button class="form-control btn btn-sm btn-primary" (click)="playGame()">
-                Play Round {{roundNumber}}
-            </button>
-        </div>
-    </div>
-</div>
-<div class="panel" *ngIf="wildcard">
-    <div class="alert-info modal-body" *ngIf="wildcard">
-        <div class="container-fluid">
-            <div class="col-md-2">
-                <div class="playing-info-wild">Wild Card</div>
-                <div class="playing-card-panel suit-match center-block"
-                     [class.suit-black]="wildcard.suit % 2 === 0"
-                     [class.suit-red]="wildcard.suit % 2 === 1">
-                    <div>{{ getKindSymbol(wildcard) }}</div>
-                    <div>{{ getSuitSymbol(wildcard) }}</div>
+<table class="table table-bordered">
+    <tr class="panelx">
+        <td class="col-sm-3">
+            <div class="row">
+                <div class="form-group">
+                    <label for="playerCount">How many players for Round {{roundNumber}}?</label>
+                    <input class="form-control text-right"
+                           id="playerCount" type="number" min="1" max="10" required="required"
+                           [(ngModel)]="playerCount" />
+                    <button class="form-control btn btn-sm btn-primary" (click)="playGame()">
+                        Play Round {{roundNumber}}
+                    </button>
                 </div>
-                <div class="playing-info-wild">Wild Card</div>
             </div>
-        </div>
-    </div>
-</div>
+        </td>
+        <td class="col-sm-6">
+            <div *ngIf="wildcard" class="wildcard-header">Wildcard</div>
+            <div *ngIf="wildcard" class="wildcard-card playing-card-panel suit-match"
+                 [class.suit-black]="wildcard.suit % 2 === 0"
+                 [class.suit-red]="wildcard.suit % 2 === 1">
+                <div>{{ getKindSymbol(wildcard) }}</div>
+                <div>{{ getSuitSymbol(wildcard) }}</div>
+            </div>
+            <div *ngIf="wildcard" class="wildcard-footer">Wildcard</div>
+        </td>
+    </tr>
+</table>
 <div class="panel" *ngIf="playerResults">
     <div class="alert-success modal-body winning-info" *ngIf="winner">
         <span>The <b>winner</b> is <b>Player {{winner.player}}</b> with the <b>high score</b> of <b>{{winner.points}} points</b>.</span>

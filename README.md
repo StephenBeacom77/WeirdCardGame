@@ -1,6 +1,7 @@
 # WeirdCardGame
 
-///     todo: package the solution by cloning to a different path!
+//	todo: package the solution by cloning to a different path!
+//	todo: improve error handling on client side - show errors in error div?
 
 --------------------------------------------------------------------------------
 The main purpose of the code test is to see your methodology and approach to
@@ -53,6 +54,7 @@ one component class.
 I didn't get around to making a special component for rendering the playing card
 on the client but it is one obvious improvement since it is a repeated pattern.
 
+****
 I allowed server side errors to make their way to the client so that they could
 be displayed to the user. I chose not to log as it is not production code but I
 would log errors to Seq via Serilog given the chance.
@@ -66,11 +68,6 @@ what I've done for the game hangs together pretty well.
 I decided late on that there was no point storing results in the db if I wasn't
 going to show them somewhere so I added an MVP Winners List that lists them in
 reverse chronological order.
-
-****
-I took some short cuts on my modelling. Card should exist with a Kind and Suit
-but no Score. There should be a ScoredCard class that inherits from Card and
-adds the Score.
 
 ****
 Early on it became obvious that there could be a tie for first place. I chose
