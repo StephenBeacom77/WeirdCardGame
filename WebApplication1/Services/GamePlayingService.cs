@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using WeirdCardGame.Data;
 using WeirdCardGame.Models;
 
 namespace WeirdCardGame.Services
@@ -16,9 +14,6 @@ namespace WeirdCardGame.Services
 
         private readonly ICardDrawingService _drawingService;
         private readonly ICardScoringService _scoringService;
-        private readonly List<Card> _deck;
-
-        private int _playerCount;
 
         /// <summary>
         ///     Makes a new game playing service.
@@ -34,20 +29,6 @@ namespace WeirdCardGame.Services
                 ?? throw new ArgumentNullException(nameof(drawingService));
             _scoringService = scoringService
                 ?? throw new ArgumentNullException(nameof(scoringService));
-
-            var kinds = GetKinds();
-            var suits = GetSuits();
-
-            var deckSize = kinds.Length * suits.Length;
-
-            _deck = new List<Card>(deckSize);
-            foreach (int kind in kinds)
-            {
-                foreach (int suit in suits)
-                {
-                    _deck.Add(new Card(kind, suit));
-                }
-            }
         }
 
         /// <summary>
@@ -64,18 +45,19 @@ namespace WeirdCardGame.Services
         /// </exception>
         public GameResult PlayGame(int playerCount)
         {
-            var maxPlayerCount = _deck.Count / PlayerHandSize;
+            var deck = _drawingService.DrawDeck();
+
+            var maxPlayerCount = (deck.Count - 1) / PlayerHandSize;
             if (playerCount < MinPlayerCount || playerCount > maxPlayerCount)
                 throw new ArgumentOutOfRangeException(nameof(playerCount), playerCount,
                     $"Player count must be between {MinPlayerCount} and {maxPlayerCount}.");
-            _playerCount = playerCount;
 
-            var wildcard = _drawingService.DrawCard(_deck);
+            var wildcard = _drawingService.DrawCard(deck);
 
-            var results = new PlayerResult[_playerCount];
-            for (var playerIndex = 0; playerIndex < _playerCount; playerIndex++)
+            var results = new PlayerResult[playerCount];
+            for (var playerIndex = 0; playerIndex < playerCount; playerIndex++)
             {
-                var cards = _drawingService.DrawHand(_deck, PlayerHandSize);
+                var cards = _drawingService.DrawHand(deck, PlayerHandSize);
                 var scoredCards = _scoringService.GetScoredCards(cards, wildcard).ToArray();
                 results[playerIndex] = new PlayerResult
                 {
@@ -88,21 +70,12 @@ namespace WeirdCardGame.Services
             var gameResult = new GameResult()
             {
                 Wildcard = wildcard,
-                PlayerResults = results.OrderByDescending(r => r.Points).ToArray()
+                PlayerResults = results
+                    .OrderByDescending(r => r.Points)
+                    .OrderBy(r => r.Player)
+                    .ToArray()
             };
             return gameResult;
-        }
-
-        private static Kinds[] GetKinds()
-        {
-            return (Enum.GetValues(typeof(Kinds)) as Kinds[])
-                .Where(kind => kind != Kinds.Any).ToArray();
-        }
-
-        private static Suits[] GetSuits()
-        {
-            return (Enum.GetValues(typeof(Suits)) as Suits[])
-                .Where(suit => suit != Suits.Any).ToArray();
         }
     }
 }

@@ -9,6 +9,11 @@ namespace WeirdCardGame.Services
     public interface ICardDrawingService
     {
         /// <summary>
+        ///     Draw a deck of cards from the box.
+        /// </summary>
+        List<Card> DrawDeck();
+
+        /// <summary>
         ///     Draw a single card from the deck.
         /// </summary>
         Card DrawCard(List<Card> deck);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WeirdCardGame.Data;
 using WeirdCardGame.Models;
 
 namespace WeirdCardGame.Services
@@ -13,6 +14,28 @@ namespace WeirdCardGame.Services
         private readonly Random _shuffler = new Random();
 
         /// <summary>
+        ///     Draw a deck of cards from the box.
+        /// </summary>
+        /// <returns>
+        ///     The deck of cards with all 13 kinds of card in all 4 suits.
+        /// </returns>
+        public List<Card> DrawDeck()
+        {
+            var kinds = GetKinds();
+            var suits = GetSuits();
+
+            var deck = new List<Card>(kinds.Length * suits.Length);
+            foreach (int kind in kinds)
+            {
+                foreach (int suit in suits)
+                {
+                    deck.Add(new Card(kind, suit));
+                }
+            }
+            return deck;
+        }
+
+        /// <summary>
         ///     Draw a single card from the deck.
         /// </summary>
         /// <param name="deck">
@@ -23,6 +46,8 @@ namespace WeirdCardGame.Services
         /// </returns>
         public Card DrawCard(List<Card> deck)
         {
+            if (deck == null)
+                throw new ArgumentNullException(nameof(deck));
             if (deck.Count - 1 < 0)
                 throw new InvalidOperationException("Cannot draw card. No cards left.");
 
@@ -45,6 +70,8 @@ namespace WeirdCardGame.Services
         /// </returns>
         public Card[] DrawHand(List<Card> deck, int handSize)
         {
+            if (deck == null)
+                throw new ArgumentNullException(nameof(deck));
             if (deck.Count - handSize < 0)
                 throw new InvalidOperationException($"Cannot draw hand. {deck.Count} card(s) left.");
 
@@ -58,6 +85,18 @@ namespace WeirdCardGame.Services
                 .OrderBy(c => c.Suit)
                 .OrderByDescending(c => c.Kind)
                 .ToArray();
+        }
+
+        private static Kinds[] GetKinds()
+        {
+            return (Enum.GetValues(typeof(Kinds)) as Kinds[])
+                .Where(kind => kind != Kinds.Any).ToArray();
+        }
+
+        private static Suits[] GetSuits()
+        {
+            return (Enum.GetValues(typeof(Suits)) as Suits[])
+                .Where(suit => suit != Suits.Any).ToArray();
         }
     }
 }
