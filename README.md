@@ -1,5 +1,7 @@
 # WeirdCardGame
 
+///     todo: package the solution by cloning to a different path!
+
 --------------------------------------------------------------------------------
 The main purpose of the code test is to see your methodology and approach to
 problem solving and delivery on a project. The main priority is not a completed,
@@ -24,6 +26,8 @@ Notes on how the solution was created
 	- It does this when running as the web app and in unit tests.
 
 - It makes use of nUnit and Moq for unit testing.
+	- Note: I was going to use Moq but ended up using Fake services to test the
+	GamePlayingService as I found it easier to set it all up that way.
 --------------------------------------------------------------------------------
 
 Notes on what I chose to focus on:
@@ -74,27 +78,3 @@ to say that since this result has no clear winner then it should have no winner.
 This means no winner id stored in the db, and it is shown differently in the UI.
 
 --------------------------------------------------------------------------------
-
-
-///     todo: remove unused code
-///     todo: package the solution by cloning to a different path!
-///     
-///     todo: add some unit tests for server code of significance
-///         - indicate in readme that not all code is tested due to lack of time
-///             - indicate what else should be tested?
-///         - CardGameController
-///             - GetRuleCards
-///                 - single test to check for all rule cards
-///             - PlayGame
-///                 - multiple tests to check for different player counts
-///                     - allowed: 1, 2, 9, 10
-///                     - invalid: 0, 11
-///                 - probably need a CardScoringService to score cards on kind and suit
-///                     - it has GetScoredCard(card, wildcard)
-///                         - it has logic from GetPointsForKind and GetScoredCard
-///                     - it can be tested and mocked for other tests
-///             - Deck
-///                 - test that it has 52 cards
-///                     - by drawing them one by one
-///                         - check off every combo of kind and suit with zero points
-///                         - the 53rd draw should fail
