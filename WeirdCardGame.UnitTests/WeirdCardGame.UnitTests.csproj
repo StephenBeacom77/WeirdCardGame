@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebApplication1\WeirdCardGame.csproj" />
     <ProjectReference Include="..\WeirdCardGame.Data\WeirdCardGame.Data.csproj" />
+    <ProjectReference Include="..\WeirdCardGame\WeirdCardGame.csproj" />
   </ItemGroup>
 
 </Project>
