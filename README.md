@@ -1,8 +1,5 @@
 # WeirdCardGame
 
-//	todo: package the solution by cloning to a different path!
-//	todo: improve error handling on client side - show errors in error div?
-
 --------------------------------------------------------------------------------
 The main purpose of the code test is to see your methodology and approach to
 problem solving and delivery on a project. The main priority is not a completed,

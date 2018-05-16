@@ -76,6 +76,14 @@
 <div class="panel">
     <h1>Game of Cards</h1>
 </div>
+<div class="alert alert-danger" *ngIf="error">
+    <div class="panel-heading">
+        <b>Oops, something went wrong. Hit refresh or play again.</b>
+    </div>
+    <div class="panel-body">
+        {{error}}
+    </div>
+</div>
 <div class="panel">
     <b>Rules</b>
     <ol>
